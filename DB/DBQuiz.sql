@@ -1,0 +1,271 @@
+﻿USE [master]  
+GO  
+  
+/****** Object:  Database [DBQuiz]    Script Date: 11/18/2017 10:57:17 AM ******/  
+CREATE DATABASE [DBQuiz]  
+ CONTAINMENT = NONE  
+ ON  PRIMARY   
+( NAME = N'DBQuiz', FILENAME = N'c:\Program Files (x86)\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\DBQuiz.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )  
+ LOG ON   
+( NAME = N'DBQuiz_log', FILENAME = N'c:\Program Files (x86)\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\DBQuiz_log.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)  
+GO  
+  
+ALTER DATABASE [DBQuiz] SET COMPATIBILITY_LEVEL = 110  
+GO  
+  
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))  
+begin  
+EXEC [DBQuiz].[dbo].[sp_fulltext_database] @action = 'enable'  
+end  
+GO  
+  
+ALTER DATABASE [DBQuiz] SET ANSI_NULL_DEFAULT OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET ANSI_NULLS OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET ANSI_PADDING OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET ANSI_WARNINGS OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET ARITHABORT OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET AUTO_CLOSE OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET AUTO_CREATE_STATISTICS ON   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET AUTO_SHRINK OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET AUTO_UPDATE_STATISTICS ON   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET CURSOR_CLOSE_ON_COMMIT OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET CURSOR_DEFAULT  GLOBAL   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET CONCAT_NULL_YIELDS_NULL OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET NUMERIC_ROUNDABORT OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET QUOTED_IDENTIFIER OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET RECURSIVE_TRIGGERS OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET  DISABLE_BROKER   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET AUTO_UPDATE_STATISTICS_ASYNC OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET DATE_CORRELATION_OPTIMIZATION OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET TRUSTWORTHY OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET ALLOW_SNAPSHOT_ISOLATION OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET PARAMETERIZATION SIMPLE   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET READ_COMMITTED_SNAPSHOT OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET HONOR_BROKER_PRIORITY OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET RECOVERY SIMPLE   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET  MULTI_USER   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET PAGE_VERIFY CHECKSUM    
+GO  
+  
+ALTER DATABASE [DBQuiz] SET DB_CHAINING OFF   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF )   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET TARGET_RECOVERY_TIME = 0 SECONDS   
+GO  
+  
+ALTER DATABASE [DBQuiz] SET  READ_WRITE   
+GO  
+
+USE [DBQuiz]  
+GO  
+  
+/****** Object:  Table [dbo].[Users]    Script Date: 11/18/2017 10:58:08 AM ******/  
+SET ANSI_NULLS ON  
+GO  
+  
+SET QUOTED_IDENTIFIER ON  
+GO  
+  
+SET ANSI_PADDING ON  
+GO  
+  
+CREATE TABLE [dbo].[Users](  
+    [UserID] [int] IDENTITY(1,1) NOT NULL,  
+    [FullName] [varchar](50) NULL,  
+    [ProfilImage] [varchar](50) NULL,  
+ CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED   
+(  
+    [UserID] ASC  
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]  
+) ON [PRIMARY]  
+  
+GO  
+  
+SET ANSI_PADDING OFF  
+GO  
+
+USE [DBQuiz]  
+GO  
+  
+/****** Object:  Table [dbo].[Quiz]    Script Date: 11/18/2017 10:58:43 AM ******/  
+SET ANSI_NULLS ON  
+GO  
+  
+SET QUOTED_IDENTIFIER ON  
+GO  
+  
+SET ANSI_PADDING ON  
+GO  
+  
+CREATE TABLE [dbo].[Quiz](  
+    [QuizID] [int] IDENTITY(1,1) NOT NULL,  
+    [QuizName] [varchar](80) NULL,  
+ CONSTRAINT [PK_Quiz] PRIMARY KEY CLUSTERED   
+(  
+    [QuizID] ASC  
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]  
+) ON [PRIMARY]  
+  
+GO  
+  
+SET ANSI_PADDING OFF  
+GO  
+
+USE [DBQuiz]  
+GO  
+  
+/****** Object:  Table [dbo].[Questions]    Script Date: 11/18/2017 10:59:29 AM ******/  
+SET ANSI_NULLS ON  
+GO  
+  
+SET QUOTED_IDENTIFIER ON  
+GO  
+  
+SET ANSI_PADDING ON  
+GO  
+  
+CREATE TABLE [dbo].[Questions](  
+    [QuestionID] [int] IDENTITY(1,1) NOT NULL,  
+    [QuestionText] [varchar](max) NULL,  
+    [QuizID] [int] NULL,  
+ CONSTRAINT [PK_Questions] PRIMARY KEY CLUSTERED   
+(  
+    [QuestionID] ASC  
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]  
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]  
+  
+GO  
+  
+SET ANSI_PADDING OFF  
+GO  
+  
+ALTER TABLE [dbo].[Questions]  WITH CHECK ADD  CONSTRAINT [FK_Questions_Quiz] FOREIGN KEY([QuizID])  
+REFERENCES [dbo].[Quiz] ([QuizID])  
+GO  
+  
+ALTER TABLE [dbo].[Questions] CHECK CONSTRAINT [FK_Questions_Quiz]  
+GO  
+
+USE [DBQuiz]  
+GO  
+  
+/****** Object:  Table [dbo].[Choices]    Script Date: 11/18/2017 11:00:03 AM ******/  
+SET ANSI_NULLS ON  
+GO  
+  
+SET QUOTED_IDENTIFIER ON  
+GO  
+  
+SET ANSI_PADDING ON  
+GO  
+  
+CREATE TABLE [dbo].[Choices](  
+    [ChoiceID] [int] IDENTITY(1,1) NOT NULL,  
+    [ChoiceText] [varchar](max) NULL,  
+    [QuestionID] [int] NULL,  
+ CONSTRAINT [PK_Choices] PRIMARY KEY CLUSTERED   
+(  
+    [ChoiceID] ASC  
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]  
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]  
+  
+GO  
+  
+SET ANSI_PADDING OFF  
+GO  
+  
+ALTER TABLE [dbo].[Choices]  WITH CHECK ADD  CONSTRAINT [FK_Choices_Questions] FOREIGN KEY([QuestionID])  
+REFERENCES [dbo].[Questions] ([QuestionID])  
+GO  
+  
+ALTER TABLE [dbo].[Choices] CHECK CONSTRAINT [FK_Choices_Questions]  
+GO  
+
+USE [DBQuiz]  
+GO  
+  
+/****** Object:  Table [dbo].[Answers]    Script Date: 11/18/2017 11:00:46 AM ******/  
+SET ANSI_NULLS ON  
+GO  
+  
+SET QUOTED_IDENTIFIER ON  
+GO  
+  
+SET ANSI_PADDING ON  
+GO  
+  
+CREATE TABLE [dbo].[Answers](  
+    [AnswerID] [int] IDENTITY(1,1) NOT NULL,  
+    [AnswerText] [varchar](max) NULL,  
+    [QuestionID] [int] NULL,  
+ CONSTRAINT [PK_Answers] PRIMARY KEY CLUSTERED   
+(  
+    [AnswerID] ASC  
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]  
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]  
+  
+GO  
+  
+SET ANSI_PADDING OFF  
+GO  
+  
+ALTER TABLE [dbo].[Answers]  WITH CHECK ADD  CONSTRAINT [FK_Answers_Questions] FOREIGN KEY([QuestionID])  
+REFERENCES [dbo].[Questions] ([QuestionID])  
+GO  
+  
+ALTER TABLE [dbo].[Answers] CHECK CONSTRAINT [FK_Answers_Questions]  
+GO  
+
